@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+
+
+<div class="col-12">
+    <!-- Таблица История поступлений -->
+    <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title">История поступлений</h4>
+            
+            <a href="{% url 'export_history_to_excel' %}" class="btn btn-success mb-3">Выгрузить в Excel</a>
+          </div>
+            <div class="table-responsive">
+                <table class="table table-centered w-100" id="income-history-datatable">
+                  <thead class="table-light">
+                    <tr>
+                      <th>#</th>
+                      <th>Итого</th>
+                      <th>Принято</th>
+                      <th>Скидка</th>
+                      <th>Сдача</th>
+                      <th>Дата</th>
+                      <th>Действия</th>
+                    </tr>
+                  </thead>
+                  <tbody id="income-history-table-body">
+                    {% for item in history_items %}
+                      {% if item|is_instance_of:"Income" %}
+                      <tr>
+                        <td>
+                          <span class="text-primary" data-bs-toggle="modal"
+                          data-bs-target="#itemModal{{ item.id }}"><i class="bx bx-cart me-1"></i>#{{ item.id }}</span>
+                        </td>
+                        <td>{{ item.total_sum }}</td>
+                        <td>{{ item.amount }}</td>
+                        <td>{% if item.discount %}{{ item.discount }}{% else %}0{% endif %}</td>
+                        <td>{{ item.change }}</td>
+                        <td>{{ item.created }}</td>
+                        <td style="position: relative;">
+                          <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                  data-bs-target="#deleteModal{{ item.id }}">
+                              <i class="bx bx-cart me-1"></i>Удалить
+                          </button>
+                          <div id="deleteModal{{ item.id }}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      <div class="modal-body">
+                                          <form class="ps-3 pe-3" method="POST">
+                                              {% csrf_token %}
+                                              <p>Вы действительно хотите удалить поставку?</p>
+                                              <div class="mb-3 text-center">
+                                                  <a class="btn btn-danger" href="{% url 'income-delete' item.id %}">Удалить</a>
+                                              </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div style="position: absolute; top: 5px; right: 0; width: 10px; height: 80%; background-color: green;"></div>
+                        </td>
+                      </tr>
+                      {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 mt-5">
+  <!-- Таблица История продаж -->
+  <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="card-title">История продаж</h4>
+          <a href="{% url 'export_sales_history_to_excel' %}" class="btn btn-success mb-3">Выгрузить в Excel</a>
+        </div>
+          <div class="table-responsive">
+              <table class="table table-centered w-100" id="sold-history-datatable">
+                <thead class="table-light">
+                  <tr>
+                    <th>#</th>
+                    <th>Итого</th>
+                    <th>Принято</th>
+                    <th>Скидка</th>
+                    <th>Сдача</th>
+                    <th>Дата</th>
+                    <th>Действия</th>
+                  </tr>
+                </thead>
+                <tbody id="sold-history-table-body">
+                  {% for item in history_items %}
+                    {% if item|is_instance_of:"OrderHistory" %}
+                    <tr>
+                      <td>
+                        <span class="text-primary" data-bs-toggle="modal"
+                        data-bs-target="#itemModal{{ item.id }}"><i class="bx bx-cart me-1"></i>#{{ item.id }}</span>
+                      </td>
+                      <td>{{ item.total_sum }}</td>
+                      <td>{{ item.amount }}</td>
+                      <td>{% if item.discount %}{{ item.discount }}{% else %}0{% endif %}</td>
+                      <td>{{ item.change }}</td>
+                      <td>{{ item.created }}</td>
+                      <td style="position: relative;">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal{{ item.id }}">
+                            <i class="bx bx-cart me-1"></i>Удалить
+                        </button>
+                        <div id="deleteModal{{ item.id }}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <form class="ps-3 pe-3" method="POST">
+                                            {% csrf_token %}
+                                            <p>Вы действительно хотите удалить ордер?</p>
+                                            <div class="mb-3 text-center">
+                                                <a class="btn btn-danger" href="{% url 'order-history-delete' item.id %}">Удалить</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="position: absolute; top: 5px; right: 0; width: 10px; height: 80%; background-color: blue;"></div>
+                      </td>
+                    </tr>
+                    {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+      </div>
+  </div>
+</div>
+<style>
+  .dotted-line {
+    flex-grow: 1;
+    border-bottom: 1px dotted;
+  }
+</style>
+
+</div>
+{% endblock %}

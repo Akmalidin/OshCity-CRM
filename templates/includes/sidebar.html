@@ -1,0 +1,108 @@
+{% load static %}
+<div class="leftside-menu">
+
+    <!-- Brand Logo Light -->
+    <a href="{% url 'dashboard' %}" class="logo logo-light">
+        <span class="logo-lg fs-2 fw-bold text-white">
+            OSH-CITY
+        </span>
+        <span class="logo-sm fs-2 fw-bold text-white">
+            OS
+        </span>
+    </a>
+
+    <!-- Brand Logo Dark -->
+    <a href="{% url 'dashboard' %}" class="logo logo-dark">
+        <span class="logo-lg fs-2 fw-bold text-white">
+            OSH-CITY
+        </span>
+        <span class="logo-sm fs-2 fw-bold text-white">
+            OS
+        </span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="h-100" id="leftside-menu-container" data-simplebar>
+      
+
+        <ul class="side-nav">
+            {% comment %} <li class="side-nav-title">{{ request.user.shop }}</li> {% endcomment %}
+
+            <li class="side-nav-item">
+                <a href="{% url 'dashboard' %}" class="side-nav-link">
+                    <i class="bx bx-stats"></i>
+                    <span>Главная</span>
+                </a>
+            </li>
+
+            <!-- Товары -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarProducts" aria-expanded="false" aria-controls="sidebarProducts" class="side-nav-link">
+                    <i class="bx bx-cube"></i>
+                    <span>Товары</span>
+                </a>
+                <div class="collapse" id="sidebarProducts">
+                    <ul class="side-nav-second-level">
+                        <li><a href="{% url 'product-list' %}">Просмотр товаров</a></li>
+                        <li><a href="{% url 'product-create' %}">Добавление товара</a></li>
+                        <li><a href="{% url 'product-sale' %}">Продажа</a></li>
+                        <li><a href="{% url 'product-income' %}">Поставка</a></li>
+                        <li><a href="{% url 'scanner' %}">Сканирование</a></li>
+                    </ul>
+                </div>
+            </li>
+            
+            <!-- Сотрудники -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarUsers" aria-expanded="false" aria-controls="sidebarUsers" class="side-nav-link">
+                    <i class="bx bx-group"></i>
+                    <span>Сотрудники</span>
+                </a>
+                <div class="collapse" id="sidebarUsers">
+                    <ul class="side-nav-second-level">
+                        <li><a href="{% url 'user-list' %}">Список сотрудников</a></li>
+                        <li><a href="{% url 'user-create' %}">Новый сотрудник</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Финансы -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarFinances" aria-expanded="false" aria-controls="sidebarFinances" class="side-nav-link">
+                    <i class="bx bx-dollar"></i>
+                    <span>Финансы</span>
+                </a>
+                <div class="collapse" id="sidebarFinances">
+                    <ul class="side-nav-second-level">
+                        <li><a href="{% url 'finance-list' %}">Прибыль и убытки</a></li>
+                        <li><a href="{% url 'expends' %}">Расходы</a></li>
+                        <li><a href="{% url 'salary-list' %}">Зарплаты</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- История -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarHistory" aria-expanded="false" aria-controls="sidebarHistory" class="side-nav-link">
+                    <i class="bx bx-time-five"></i>
+                    <span>История операций</span>
+                </a>
+                <div class="collapse" id="sidebarHistory">
+                    <ul class="side-nav-second-level">
+                        <li><a href="{% url 'history' %}">Общие операции</a></li>
+                        <li><a href="{% url 'sold-history' %}">Продажи</a></li>
+                        <li><a href="{% url 'income-history' %}">Поставки</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- Отчеты -->
+            <li class="side-nav-item">
+                <a href="{% url 'reports' %}" aria-controls="sidebarReports" class="side-nav-link">
+                    <i class="bx bx-file"></i>
+                    <span>Отчеты</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

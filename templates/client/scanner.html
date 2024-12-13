@@ -1,0 +1,130 @@
+{% extends 'client/base.html' %}
+{% block content %}
+
+<div class="container">
+    <button id="start-scan" class="btn btn-primary mt-5" type="button">Начать сканирование</button>
+<div class="row justify-content-center mt-2" id="result">
+    <div id="video-container">
+        <video id="video" autoplay playsinline width="600"></video>
+    </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // При нажатии на кнопку включаем камеру и начинаем сканирование
+    $('#start-scan').click(function() {
+
+        // Проверка поддержки getUserMedia
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Инициализация QuaggaJS
+            
+
+        startCamera();
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: $('#video')[0],  // Видеопоток для захвата (нужно выбрать DOM-элемент, поэтому [0])
+                    constraints: {
+                        facingMode: "environment"  // Используем заднюю камеру, если доступна
+                    }
+                },
+                decoder: {
+                    readers: ['code_128_reader',
+                                'ean_reader',
+                                'ean_8_reader',
+                                'code_39_reader',
+                                'code_39_vin_reader',
+                                'codabar_reader',
+                                'upc_reader',
+                                'upc_e_reader',
+                                'i2of5_reader',
+                                '2of5_reader',
+                                'code_93_reader',
+                            ] // Чтение штрих-кодов разных типов
+                }
+            }, function(err) {
+                if (err) {
+                    console.error(err);
+                    $('#result').text(err);
+                    return;
+                }
+                Quagga.start(); // Запускаем сканирование
+            });
+
+            // Обработка результата сканирования
+            Quagga.onDetected(function(result) {
+                let code = result.codeResult.code;
+                $('#result').html("Штрих-код: " + code);
+                Quagga.stop(); // Останавливаем сканирование
+                
+                // Отправка штрих-кода на сервер для поиска товара
+                $.ajax({
+                    url: '{% url "find-product" %}',  // Укажите URL вашего API для поиска товара
+                    method: 'GET',
+                    data: { barcode: code },
+                    success: function(data) {
+                        btnStatus('success');
+
+                        // Выводим информацию о товаре
+                        $('#result').html(
+                            `
+                        <div class="col-sm-2 col-md-4 col-lg-3">
+                            <div class="card h-100">
+                                <img src="${data.image}" class="card-img-top" height="250" alt="..." style="object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title"><a href="#" class="text-primary stretched-link">${data.product_name}</a></h5>
+                                    <p class="card-text">
+                                        ${data.price}C
+                                    </p>
+                                    <p class="card-text d-flex align-items-center">
+                                        <i class='bx bxs-barcode' ></i>${code}
+                                    </p>
+                                </div> <!-- end card-body -->
+                            </div> <!-- end card -->
+                        </div>
+                        `
+                        );
+                    },
+                    error: function(e) {
+                        btnStatus('error');
+                        console.log(e);  // Исправлена ошибка в консоли
+                    }
+                });
+            });
+        } else {
+            $('#result').html("Ваш браузер не поддерживает доступ к камере.");
+        }
+    });
+
+    function btnStatus(status) {
+        if (status == 'start') {
+            $('#start-scan').text('Сканирование...');
+            startCamera();
+            $('#start-scan').addClass('btn-warning').removeClass('btn-primary');
+        } else if (status == 'error') {
+            $('#start-scan').text('Товар не найден');
+            $('#start-scan').addClass('btn-danger').removeClass('btn-warning');
+        }
+         else if (status == 'success') {
+            $('#start-scan').text('Товар найден');
+            $('#start-scan').addClass('btn-success').removeClass('btn-warning');
+        }
+    }
+    async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const videoElement = document.getElementById('video');
+                videoElement.srcObject = stream;
+            } catch (error) {
+                console.error('Error accessing camera: ', error);
+            }
+        }
+});
+
+</script>
+{% endblock %}

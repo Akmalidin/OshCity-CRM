@@ -1,0 +1,103 @@
+{% load static %}
+
+
+<div class="navbar-custom">
+    <div class="topbar container-fluid">
+        <div class="d-flex align-items-center gap-lg-2 gap-1">
+
+            <!-- Topbar Brand Logo -->
+            <div class="logo-topbar">
+                <!-- Logo light -->
+                <a href="index.html" class="logo-light">
+                    <span class="logo-lg">
+                        <img src="{% static 'assets/images/logo.png' %}" alt="logo">
+                    </span>
+                    <span class="logo-sm">
+                        <img src="{% static 'assets/images/logo-sm.png' %}" alt="small logo">
+                    </span>
+                </a>
+
+                <!-- Logo Dark -->
+                <a href="index.html" class="logo-dark">
+                    <span class="logo-lg">
+                        <img src="{% static 'assets/images/logo-dark.png' %}" alt="dark logo">
+                    </span>
+                    <span class="logo-sm">
+                        <img src="{% static 'assets/images/logo-dark-sm.png' %}" alt="small logo">
+                    </span>
+                </a>
+            </div>
+
+            <!-- Sidebar Menu Toggle Button -->
+            <button class="button-toggle-menu">
+                <i class="bx bx-menu"></i>
+            </button>
+
+            <!-- Horizontal Menu Toggle Button -->
+            <button class="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                <div class="lines">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+
+            <!-- Topbar Search Form -->
+            <div class="app-search d-none d-lg-block">
+                <form action="{% url 'product-list' %}">
+                    <div class="input-group">
+                        <input type="search" name="search" class="form-control dropdown-toggle" placeholder="Поиск..." id="top-search">
+                        <span class="bx bx-search search-icon"></span>
+                        <button class="input-group-text btn btn-primary" type="submit">Поиск</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <ul class="topbar-menu d-flex align-items-center gap-3">
+
+
+
+            <li class="d-none d-sm-inline-block">
+                <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left" title="Theme Mode">
+                    <i class="bx bx-moon font-22"></i>
+                </div>
+            </li>
+
+            <li class="d-none d-md-inline-block">
+                <a class="nav-link" href="index.html" data-toggle="fullscreen">
+                    <i class="bx bx-fullscreen font-22"></i>
+                </a>
+            </li>
+
+            <li class="dropdown">
+                <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="index.html#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <span class="account-user-avatar">
+                        {% if request.user.image %}
+                        <img src="{{ request.user.image.url }}" alt="user-image" width="32" height="32" style="object-fit: cover;" class="rounded-circle">
+                        {% else %}
+                        <img src="{% static 'assets/images/users/avatar-1.jpg' %}" alt="user-image" width="32" height="32" style="object-fit: cover;" class="rounded-circle">
+                        {% endif %}
+                    </span>
+                    <span class="d-lg-flex flex-column gap-1 d-none">
+                        <h5 class="my-0">{{ request.user.username }}</h5>
+                        <h6 class="my-0 fw-normal">{{ user.get_role_display }}</h6>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
+
+                    
+                    <a href="{% url 'password_change' %}" class="dropdown-item">
+                        <i class="bx bx-edit me-1"></i>
+                        <span>Изменение пароля</span>
+                    </a>
+                    <!-- item-->
+                    <a href="{% url 'logout' %}" class="dropdown-item">
+                        <i class="bx bx-log-out me-1"></i>
+                        <span>Выход</span>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-5">
+                        <h1 class="mb-2">
+                            Отчеты</h1>
+                    </div>
+                </div>
+                <div class="btn-group mb-3" role="group" aria-label="Basic outlined example">
+                    <a href="{% url 'export_zero_stock' %}" class="btn btn-outline-primary">Отчет по нулевым остаткам</a>
+                    <a href="{% url 'export_low_stock' %}" class="btn btn-outline-primary">Отчет по остаткам < 3</a>
+                    <a href="{% url 'export_all' %}" class="btn btn-outline-primary">Общий прайс лист</a>
+                    <a href="{% url 'report-selection' %}" class="btn btn-outline-primary">Сформировать отчет по категории/бренду</a>
+
+                </div>
+                <div class="table-responsive">
+                    
+                    <!-- Отчет 1: Нулевые остатки -->
+                    <h4 class="mt-4">Товары с нулевыми остатками</h4>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Товар</th>
+                                        <th>Штрих код</th>
+                                        <th>Магазин</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in zero_stock_products %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'product-details' product.id %}" class="text-body">{{ product.name }}</a>
+                                        </td>
+                                        <td>{{ product.bar_code }}</td>
+                                        <td>{{ product.shop.name }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3">Нет товаров с нулевыми остатками.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Отчет 2: Остатки 3 или меньше -->
+                    <h4 class="mt-4">Товары с остатками 3 или меньше</h4>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Товар</th>
+                                        <th>Штрих код</th>
+                                        <th>Количество</th>
+                                        <th>Магазин</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in low_stock_products %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'product-details' product.id %}" class="text-body">{{ product.name }}</a>
+                                        </td>
+                                        <td>{{ product.bar_code }}</td>
+                                        <td>{{ product.quantity }} шт.</td>
+                                        <td>{{ product.shop.name }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4">Нет товаров с остатками 3 или меньше.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Отчет 3: По категориям и брэндам -->
+                    <h4 class="mt-4">Товары по категориям и брендам</h4>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Категория</th>
+                                        <th>Бренд</th>
+                                        <th>Товар</th>
+                                        <th>Количество</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in products_by_category_and_brand %}
+                                    <tr>
+                                        <td>{{ product.category.name }}</td>
+                                        <td>{{ product.brand.name }}</td>
+                                        <td>
+                                            <a href="{% url 'product-details' product.id %}" class="text-body">{{ product.name }}</a>
+                                        </td>
+                                        <td>{{ product.quantity }} шт.</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4">Нет товаров в базе данных.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+</div>
+
+{% endblock %}

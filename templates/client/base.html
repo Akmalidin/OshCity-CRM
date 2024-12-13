@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Landing Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.ico' %}">
+
+    <!-- Theme Config Js -->
+    <script src="{% static 'assets/js/hyper-config.js' %}"></script>
+
+    <!-- Vendor css -->
+    <link href="{% static 'assets/css/vendor.min.css' %}" rel="stylesheet" type="text/css" />
+
+    <!-- App css -->
+    <link href="{% static 'assets/css/app-saas.min.css' %}" rel="stylesheet" type="text/css" id="app-style" />
+
+    <!-- Icons css -->
+    <link href="{% static 'assets/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    {% include 'client/header.html' %}
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-5">
+                    <div class="mt-md-4">
+                        <div>
+                            <span class="badge bg-danger font-13 rounded-pill">Новинка</span>
+                            <span class="text-white-50 ms-1">Добро пожаловать на главную страницу</span>
+                        </div>
+                        <h2 class="text-white fw-normal mb-4 mt-3 lh-base">
+                            Автоматизация продаж для вашего бизнеса
+                        </h2>
+    
+                        <p class="mb-4 font-16 text-white-50">Наш сайт позволяет вам легко управлять продажами, просматривать товары и принимать заказы через удобную панель администратора. Ваши клиенты могут быстро находить нужные товары и совершать покупки прямо на сайте.</p>
+    
+                       <div class="d-flex gap-2">
+                            <a href="#" class="btn btn-lg font-16 btn-success">Посмотреть товары <i class="mdi mdi-arrow-right ms-1"></i></a>
+                            <a href="#" class="btn btn-lg font-16 btn-info">Найти товар по штрих коду</a>
+                       </div>
+                    </div>
+                </div>
+                <div class="col-md-5 offset-md-2">
+                    <div class="text-md-end mt-3 mt-md-0">
+                        <img src="{% static 'assets/images/svg/startup.svg' %}" alt="" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% block content %}
+
+    {% endblock %}
+    {% include 'client/footer.html' %}
+    <!-- Vendor js -->
+    <script src="{% static 'assets/js/vendor.min.js' %}"></script>
+
+    <!-- App js -->
+    <script src="{% static 'assets/js/app.min.js' %}"></script>
+
+</body>
+
+</html>
